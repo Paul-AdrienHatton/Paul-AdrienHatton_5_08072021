@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Orinoco le site spécialisé dans l'artisanat des ours en peluche 100% coton biologique">
+        <link rel="shortcut icon" type="img/jpg" href="img/favicon.jpg">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" 
+        integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+        
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="css/main.css">
+
+        <title>Orinico - Vos articles</title>
+    </head>
+    <body>
+        <header>
+            <figure>
+                <a href="index.html"><img src="../img/logo.jpg" alt="Logo de l'entreprise orinoco de conception de peluche"></a>
+            </figure>
+            <nav>
+                <ul class="icon">
+                    <li class="icon__description"><a href="index.html"><p>Accueil</p></a></li>
+                    <li class="icon__description"><a href="index.html"><p>Produits</p></a></li>
+                    <li class="icon__description"><a href="panier.html"><p>Panier</p></a><i class="fas fa-cart-arrow-down"></i><div class="item__number"></div></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="error">
+                <div id="item__select">
+                    <!--Intégration du panier en js-->
+                </div>
+            </div>    
+        </main>
+        <!--::::::::::::::::::::::::::::::: Script JS :::::::::::::::::::::::::::::::-->
+        <script src="js/panier.js"></script>
+        <script src="js/nombresArticles.js"></script> 
+        <!--::::::::::::::::::::::::::::::: End :::::::::::::::::::::::::::::::-->
+    </body>
+</html>
