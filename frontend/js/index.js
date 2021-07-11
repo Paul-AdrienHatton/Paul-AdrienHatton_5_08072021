@@ -1,5 +1,9 @@
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //Récupération des données ours en peluches avec l'API fetch.
-
+//Donné du produit injecté dans une fonction, mise au format html
+//Gestion des erreur instruction try/catch
+//
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 fetch("http://localhost:3000/api/teddies")
   .then((response) => response.json())
   .then((response) => {
