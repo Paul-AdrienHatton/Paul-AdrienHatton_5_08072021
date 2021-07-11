@@ -74,6 +74,15 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
       addProductOrUpdateQuantity();
     });
   });
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+/**
+ * Je veux ajouter ma réponse au session storage
+ * je veux lui passe la fonction addProductOrUpdateQuantity
+ * je veux ajouter la reponse au panier avec un add event listener pour récupérer mes données
+ */
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 /**
  * Je veux ajouter un élément dans le panier.
