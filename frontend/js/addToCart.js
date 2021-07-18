@@ -1,13 +1,10 @@
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-/**
- * Je veux ajouter un élément dans le panier.
- * Je dois savoir si le panier est vide ou pas. (cartExists)
- * s'il est vide, j'ajoute simplement le produit. (addToCart)
- * s'il n'est pas vide, je vérifie si le produit est déjà dans le panier (productAlreadyInCart)
- *  - s'il est dans le panier , j'augmente la quantité (updateProductQuantity)
- *  - s'il n'y est pas, j'ajoute simplement le produit.(addToCart)
- */
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// Créer un nouveau "addToCart.js" en s'inspirant de ce que nous avons fait, mais modifiant quelques comportements :
+// - cart doit être un objet (fonctions createCartDto() , setCart() , itemsEnum()).
+// - cart doit avoir au minimum les propriétés suivantes :
+//   - itemsCount
+//   - itemsTotalValue
+//   - itemsEnum : []
+// Function ajout des articles au panier.
 
 // déclare une constante po;ur le nom du local storage
 const CART_STORAGE_NAME = "cart";
@@ -17,38 +14,33 @@ const CART_STORAGE_NAME = "cart";
 //   Function ajouter élément au panier ou augmenter la quantitée    //
 //                                                                   //
 ///////////////////////////////////////////////////////////////////////
+/**
+ * Cette fonction :
+ *  - récupère le panier s'il existe dans le sessionStorage ;
+ *      - s'il existe, elle l'utilise comme objet
+ *      - s'il n'existe pas, elle instancie un objet "cart"
+ *  - vérifie si le produit est déjà dans le panier ;
+ *      - s'il est dans le panier, elle met à jour la quantité
+ *      - s'il n'y est pas, elle l'ajoute
+ *  - calcule les valeurs des propriétés de l'objet "cart"
+ *  - sauvegarde l'objet "cart" dans le sessionStorage
+ * @param {*} product
+ */
+function myCart(product) {
+  let cart = getCartDtoOrCreate();
 
-function addProductOrUpdateQuantity(product) {
-  if (cartExists)
-    if (productAlreadyInCart(product)) updateProductQuantity(product);
-    else addToCart(product);
-  else addToCart(product);
+  if (productAlreadyInCart(cart, product)) updateProductQuantity(cart, product);
+  else addToCart(cart, product);
 
+  setValuesforCart(cart);
+  saveCart(cart);
   howManyArticles();
-  alert("Votre produit a été ajouté au panier");
+  alert("Vôtre produit a été ajouter au panier");
 }
 
 ///////////////////////////////////////////////////////////////////////
 //                                                                   //
-//           S'il est vide, j'ajoute simplement le produit.          //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-
-function addToCart(product) {
-  // je recupère le panier (s'il existe, c'est un array, sinon on l'initialise)
-  let cart = sessionStorage.getItem(CART_STORAGE_NAME)
-    ? sessionStorage.getItem(CART_STORAGE_NAME)
-    : [];
-
-  // l'array cart est initialisé, je pousse les données dedans
-  cart.push(getDto(product));
-
-  // je stocke mon array "panier" dans le sessionStorage
-  sessionStorage.setItem(CART_STORAGE_NAME, cart);
-}
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//           S'il est vide, j'ajoute simplement le produit.          //
+//           Fonction Objet de transfert de données                  //
 //                                                                   //
 ///////////////////////////////////////////////////////////////////////
 
@@ -63,61 +55,103 @@ function getDto(product) {
     _id: product._id,
     imageUrl: product.imageUrl,
     name: product.name,
-    price: product.price,
+    price: product.price / 100,
     quantity: 1,
     selectColors: product.selectColors,
   };
 }
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//           Je dois savoir si le panier est vide ou pas             //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+
 /**
- * Détermine si le panier est déjà créé
- * @returns boolean
+ * Crée un objet "cart" utilisé comme format d'echange et de stockage
+ * @returns Object
  */
-function cartExists() {
-  return sessionStorage.getItem(CART_STORAGE_NAME) !== null;
+function createCartDto() {
+  return {
+    itemsCount: 0,
+    itemsTotalValue: 0.0,
+    itemsEnum: [],
+  };
 }
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-//  S'il n'est pas vide, je vérifie si le produit est déjà dans le panier //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
 
-function productAlreadyInCart(product) {
-  let productAlreadyInCart = false;
-
-  if (cartExists) {
-    // on récupère le panier.
-    let cart = JSON.parse(sessionStorage.getItem(CART_STORAGE_NAME));
-
-    // on parse le panier item par item (boucle)
-    cart.forEach((item) => {
-      if (
-        product._id === item._id &&
-        product.selectColors === item.selectColors
-      )
-        productAlreadyInCart = true;
-    });
-  }
-
-  return productAlreadyInCart;
-}
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//         S'il est dans le panier , j'augmente la quantité          //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-
-function updateProductQuantity(product) {
-  // on récupère le panier.
+/**
+ * Vérifie l'existence d'un panier dans le sessionStorage.
+ *  - s'il existe, le retourne sous forme d'objet
+ *  - s'il n'existe pas, instancie un objet "cart" et le retourne
+ * @returns
+ */
+function getCartDtoOrCreate() {
   let cart = JSON.parse(sessionStorage.getItem(CART_STORAGE_NAME));
+  if (cart) return cart;
+  else return createCartDto();
+}
 
-  // on parse le panier item par item (boucle)
-  cart.forEach((item) => {
-    if (product._id === item._id && product.selectColors === item.selectColors)
-      item.quantity++;
+/**
+ * Calcule les valeurs des propriétés "itemsCount" et "itemsTotalValue"
+ * de l'objet "cart".
+ * Doit être appelée juste avant de sauvegarder l'objet "cart".
+ * @param {*} cart
+ */
+function setValuesforCart(cart) {
+  cart.itemsCount = 0;
+  cart.itemsTotalValue = 0.0;
+
+  cart.itemsEnum.forEach((element) => {
+    cart.itemsCount += element.quantity;
+    cart.itemsTotalValue += element.price * element.quantity;
+  });
+}
+
+/**
+ * Sauvegarde l'objet "cart" sous forme de json dans le sessionStorage
+ * @param {*} cart
+ */
+function saveCart(cart) {
+  sessionStorage.setItem(CART_STORAGE_NAME, JSON.stringify(cart));
+}
+
+/**
+ * ajoute un item au cart.
+ * Ne vérifie pas son existence ou non.
+ * @param {*} cart
+ * @param {*} product
+ */
+function addToCart(cart, product) {
+  cart.itemsEnum.push(getDto(product));
+}
+
+/**
+ * Verifie l'existence d'un produit dans le cart.
+ * retourne true si le produit est déjà dans le panier.
+ * @param {*} cart
+ * @param {*} product
+ * @returns bool
+ */
+function productAlreadyInCart(cart, product) {
+  let alreadyInCart = false;
+  if (!cart.itemsEnum) return alreadyInCart;
+
+  cart.itemsEnum.forEach((element) => {
+    if (
+      element._id === product._id &&
+      element.selectColors === product.selectColors
+    )
+      alreadyInCart = true;
+  });
+
+  return alreadyInCart;
+}
+
+/**
+ * Ajoute une unité à un produit déjà dans le panier.
+ * @param {*} cart
+ * @param {*} product
+ */
+function updateProductQuantity(cart, product) {
+  cart.itemsEnum.forEach((element) => {
+    if (
+      element._id === product._id &&
+      element.selectColors === product.selectColors
+    )
+      element.quantity += 1;
   });
 }

@@ -75,13 +75,6 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
       // ajout évènement au clique de cartBtn
       let select = document.querySelector(".section__choice");
       response.selectColors = select.options[select.selectedIndex].value;
-      addProductOrUpdateQuantity(response);
+      myCart(response);
     });
   });
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-/**
- * Je veux ajouter ma réponse au session storage
- * je veux lui passe la fonction addProductOrUpdateQuantity
- * je veux ajouter la reponse au panier avec un add event listener pour récupérer mes données
- */
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

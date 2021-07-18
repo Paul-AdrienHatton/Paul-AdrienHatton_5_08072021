@@ -9,6 +9,7 @@
 const contact = JSON.parse(sessionStorage.getItem("contact"));
 const orderId = JSON.parse(sessionStorage.getItem("orderId"));
 const total = JSON.parse(sessionStorage.getItem("total"));
+
 let html = "";
 
 html += `
@@ -20,10 +21,11 @@ html += `
         <li class="puce">Adresse: ${contact.address}</li>
         <li class="puce">Email: ${contact.email}</li>
     </ul>
-    <h3>Total: ${(total / 100).toFixed(2).replace(".", ",")} €</h3>
+    <h3>Total: ${total.toFixed(2).replace(".", ",")} €</h3>
     <h3>Numéro de la commande: </br> ${orderId}</h3>`;
 document.getElementById("order__confirmation").innerHTML = html;
 
 sessionStorage.removeItem("contact");
 sessionStorage.removeItem("total");
 sessionStorage.removeItem("orderId");
+sessionStorage.removeItem("cart");

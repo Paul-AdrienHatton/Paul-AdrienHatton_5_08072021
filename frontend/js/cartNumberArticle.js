@@ -10,17 +10,16 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 howManyArticles();
 // function qui affiche le nombre d'articles dans le panier.
+
 function howManyArticles() {
   showNumber = document.querySelector(".product__number");
   let number = 0;
 
   if (sessionStorage.getItem("cart") !== null) {
-    // si le storage est différent de 0
-    let keyNumber = JSON.parse(sessionStorage.getItem("cart")); //convertir en objet JavaScript getItem convertie en string en ajoutant les données reçus
-
-    keyNumber.forEach((prod) => {
-      number = number + prod.quantity; // pour chaque boucle le nombre est égal a 0 + la quantité de produit dans le storage
-    });
+    let keyNumber = JSON.parse(sessionStorage.getItem("cart"));
+    number = keyNumber.itemsCount;
+    showNumber.textContent = number;
+  } else {
+    showNumber.textContent = 0;
   }
-  showNumber.textContent = number; // on ajoute le nombre à la div
 }

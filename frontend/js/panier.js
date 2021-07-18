@@ -30,8 +30,7 @@ myCart();
 
 function myCart() {
   if (sessionStorage.getItem("cart") !== null) {
-    let products = JSON.parse(sessionStorage.getItem("cart"));
-
+    let product = JSON.parse(sessionStorage.getItem("cart"));
     cartShow.insertAdjacentHTML(
       "afterbegin",
       `<h1>Panier</h1>
@@ -51,21 +50,18 @@ function myCart() {
     );
 
     let html = "";
-    products.forEach((product, index) => {
-      total = total + product.price * product.quantity;
-
+    total = product.itemsTotalValue;
+    product.itemsEnum.forEach((product, index) => {
       html += `<tr style="justify-items:center;">
                         <td class="old"><img src="${
                           product.imageUrl
                         }" alt="ours peluche" style="width:200px;"></td>
                         <td class="old">${product.name}</td>
                         <td class="old">${product.selectColors}</td>
-                        <td class="old" style="padding-left:50px;"><button class="decrease__product ${index}" style=" background-color:white; padding:0 5px 0 5px;"> - </button>
+                        <td class="old" style="padding-left:50px;">
                         ${product.quantity}
-                        <button class="increase__product ${index}" style="background-color:white; padding:0 5px 0 5px;"> + </button></td>
                         <td class="old" style="padding-left:50px;">${(
-                          (product.price * product.quantity) /
-                          100
+                          product.price * product.quantity
                         )
                           .toFixed(2)
                           .replace(".", ",")}€</td>
@@ -77,9 +73,7 @@ function myCart() {
     cartShow.insertAdjacentHTML(
       "beforeend",
       `<div class="total" style="margin-left:5%;">
-                <p class="cart-section" style="margin-right:5%;">Total: ${(
-                  total / 100
-                )
+                <p class="cart-section" style="margin-right:5%;">Total: ${total
                   .toFixed(2)
                   .replace(".", ",")}€</p>
                 <button class="cancel__ordered">
@@ -118,24 +112,12 @@ function myCart() {
           </form>`
     );
 
-    const decreaseItem = document.querySelectorAll(".decrease__product");
-    decreaseItem.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        removeOneItem(e, products);
-      });
-    });
-    // L'ecoute des bouttons "+" on ajoute un event qui au clique ajoute un item avec la fonction addOneItem
-    const increaseItem = document.querySelectorAll(".increase__product");
-    increaseItem.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        addOneItem(e, products);
-      });
-    });
     //L'ecoute du boutton "supprimer" on ajoute un event qui vient supprimer l'item avec la fonction deleteproductselect
     const deleteItem = document.querySelectorAll(".delete__product");
     deleteItem.forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        deleteproductselect(e, products);
+        let products = product.itemsEnum;
+        deleteProductSelect(e, products);
       });
     });
     //L'ecoute du boutton "annuler" le panier on ajoute un event qui vient supprimer l'ensemble du panier avec la fonction cancelMyOrdered
@@ -157,60 +139,32 @@ function myCart() {
       //éviter la sérialisation supplémentaire, rend la fonction plus rapide et directe que innerHTML.
       "afterbegin", //  Juste à l'intérieur de l'element , avant son premier enfant
       `<h2>Panier</h2>
-            <p class="cart-section">
-                Vous n'avez aucun article!<a href="./index.html"><button>Revenir à la page d'accueil</button></a>
-            </p>`
+                <p class="cart-section">
+                    Vous n'avez aucun article!<a href="./index.html"><button>Revenir à la page d'accueil</button></a>
+                </p>`
     );
   }
 }
-
-// Fonction ajout d'un article passé à l'eventlistener increaseItem
-function addOneItem(e, products) {
-  let index = e.target.classList[1].slice(-1);
-  products[index].quantity++;
-  sessionStorage.setItem("cart", JSON.stringify(products));
-  updateNumberArticles();
-}
-
-// Fonction enlève un article passé à l'eventlistener decreaseItem
-function removeOneItem(e, products) {
-  let index = e.target.classList[1].slice(-1);
-  products[index].quantity--;
-
-  if (products[index].quantity <= 0) {
-    products.splice(index, 1);
-    if (products.length === 0) {
-      sessionStorage.removeItem("cart");
-    } else {
-      sessionStorage.setItem("cart", JSON.stringify(products));
-    }
-  } else {
-    sessionStorage.setItem("cart", JSON.stringify(products));
-  }
-  updateNumberArticles();
-}
-
-//Fonction supprime un article passé à l'eventlistener deleteItem
+//Supprime l'article sélectionné.
 //Récupère l'index de l'article correspondant avec le caractère du nom de la classe.
-function deleteproductselect(e, products) {
+//Supprime le bon article dans le tableau "items" du sessionStorage
+function deleteProductSelect(e, products) {
   let index = e.target.classList[1].slice(-1);
   products.splice(index, 1);
-  sessionStorage.setItem("cart", JSON.stringify(products));
 
   if (products.length === 0) {
     sessionStorage.removeItem("cart");
   }
-  updateNumberArticles();
+  howManyArticles();
 }
 
 //Supprime tout les article du sessionstorage
 function cancelMyOrdered() {
   sessionStorage.removeItem("cart");
-  updateNumberArticles();
 }
 
 //Réinitialise la section "item__select" et le nombre d'article dans le panier
-function updateNumberArticles() {
+function howManyArticles() {
   cartShow.innerHTML = "";
   myCart();
   howManyArticles();
@@ -220,3 +174,55 @@ function updateNumberArticles() {
 //                  Function envoie du formulaire                    //
 //                                                                   //
 ///////////////////////////////////////////////////////////////////////
+
+//Récupère les valeurs de l'input dans contact__form
+//Récupère les id des produits du panier dans le tableau products
+//L'objet contact et le tableau products sont envoyé dans la function postOrder
+function sendform() {
+  let contact = {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    address: document.getElementById("address").value,
+    city: document.getElementById("city").value,
+    email: document.getElementById("email").value,
+  };
+
+  let products = [];
+  if (sessionStorage.getItem("cart") !== null) {
+    let productTab = JSON.parse(sessionStorage.getItem("cart"));
+    productTab.itemsEnum.forEach((p) => {
+      products.push(p._id);
+    });
+  }
+
+  let customerOder = JSON.stringify({
+    contact,
+    products,
+  });
+  postOrder(customerOder);
+}
+
+// =====================================================================================
+
+//Requête POST, envoi au serveur "contact" et le tableau d'id "products"
+//Enregistre l'objet "contact" et Id, le total de la commande sur le sessionStorage.
+//Envoie page "confirmation"
+function postOrder(customerOder) {
+  fetch("http://localhost:3000/api/teddies/order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    mode: "cors",
+    body: customerOder,
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((r) => {
+      sessionStorage.setItem("contact", JSON.stringify(r.contact));
+      sessionStorage.setItem("orderId", JSON.stringify(r.orderId));
+      sessionStorage.setItem("total", JSON.stringify(total));
+      window.location.replace("./confirmation.html");
+    });
+}
