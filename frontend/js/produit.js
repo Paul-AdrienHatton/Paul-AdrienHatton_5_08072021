@@ -21,20 +21,20 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
 
     function formatHtml(name, imageUrl, description, price, _id) {
       let myreturn = "";
-      myreturn += `<h1 class="row">${name}</h1>
-        <p class="row"><img src="${imageUrl}" alt="image d'ours en détails" style="width:40%; border-radius:5px;"></p>
-        <p class="row">${description}</p>
-        <p class="row"><b>Prix: ${(price / 100)
+      myreturn += `<h1 class="item__title">${name}</h1>
+        <p class="item__img"><img src="${imageUrl}" alt="image d'ours en détails"></p>
+        <p class="item__description">${description}</p>
+        <p class="item__price"><b>Prix: ${(price / 100)
           .toFixed(2)
           .replace(".", ",")}€</b></p>
         <!-- Personalisation de la couleur -->
         <label for="select__color">
-            <h3>Personnaliser votre ours</h3>
+            <h3 class="item__subtitle">Personnaliser votre ours</h3>
         </label>
             <select class="section__choice" name="colors" id="select__color">
             <!-- Mes choix de couleurs dans la function forEach --!>
             </select>
-        <button id="addToCart">Ajouter au panier</button>`;
+        <button class="item__btn2"id="addToCart">Ajouter au panier</button>`;
 
       return myreturn;
     }
@@ -75,6 +75,8 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
       // ajout évènement au clique de cartBtn
       let select = document.querySelector(".section__choice");
       response.selectColors = select.options[select.selectedIndex].value;
-      myCart(response);
+      if (confirm("Êtes-vous de vouloir ajouter cette article ?")) {
+        myCart(response);
+      }
     });
   });

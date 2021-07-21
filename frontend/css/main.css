@@ -1,0 +1,337 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "karma";
+  src: url("../fonts/karma.eot"), url("../fonts/karma.woff"),
+    url("../fonts/karma.ttf"), url("../fonts/karma.svg");
+}
+
+/*----------Responsive-Menu-1024px----------*/
+@media screen and (max-width: 1024px) {
+  .item {
+    width: 55%;
+  }
+  .item img {
+    height: 240px;
+  }
+}
+
+/*----------Responsive-Menu-745px----------*/
+@media screen and (max-width: 780px) {
+  th {
+    visibility: hidden;
+  }
+  td {
+    display: flex;
+    flex-direction: column;
+  }
+  .item img {
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  header ul {
+    display: flex;
+    flex-direction: column;
+    margin-top: -40px;
+  }
+  .item img {
+    height: 150px;
+  }
+}
+
+/*----------Responsive-Menu-450px----------*/
+@media screen and (max-width: 550px) {
+  .component {
+    text-align: center;
+    font-size: 15px;
+  }
+  .item img {
+    height: 100px;
+  }
+  .addCart {
+    font-size: 10px;
+  }
+}
+
+header {
+  display: flex;
+  justify-content: space-around;
+  background-color: #f3e9f1;
+}
+header img {
+  border-radius: 8px;
+}
+header nav {
+  margin-top: 50px;
+}
+header nav .icon {
+  display: flex;
+  list-style-type: none;
+  font-size: 25px;
+}
+header nav .icon__description {
+  display: flex;
+  padding: 0 15px 0 15px;
+}
+header nav .icon__description i {
+  margin-left: 10px;
+}
+h1 {
+  text-align: center;
+}
+
+footer {
+  display: flex;
+  justify-content: space-around;
+  background-color: #f3e9f1;
+  width: 100%;
+}
+footer a {
+  padding: 20px 0 20px 0;
+}
+
+/*==================== Contenu principal 4 pages html ====================*/
+* {
+  font-family: "karmaGeorgia, serif, sans-serif";
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+li {
+  text-decoration: none;
+}
+
+/*==================== Page index ====================*/
+/*---------- Articles ----------*/
+.item {
+  width: 500px;
+  border: solid 1px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  box-shadow: 2px 5px 16px 1px rgba(0, 0, 0, 0.3);
+  margin: 50px auto;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+}
+
+.item__title {
+  color: black;
+  text-shadow: 2px 1px rgba(0, 0, 0, 0.2);
+}
+.item__btn {
+  width: 200px;
+  height: 20px;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 5px 6px 1px rgba(0, 0, 0, 0.3);
+}
+.item__btn:hover {
+  color: #000000;
+  background-color: white;
+}
+.item__price {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+.item__img img {
+  width: 450px;
+  height: 300px;
+  margin-top: 10px;
+}
+.item__description {
+  text-align: center;
+}
+/*==================== Page produit ====================*/
+/*---------- Articles ----------*/
+#item__details {
+  width: 500px;
+  height: 550px;
+  border: solid 1px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  box-shadow: 2px 5px 16px 1px rgba(0, 0, 0, 0.3);
+  margin: 50px auto;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+}
+.section__choice {
+  width: 120px;
+  height: 20px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+.item__subtitle {
+  position: absolute;
+  bottom: 40px;
+  left: 10px;
+}
+.item__btn2 {
+  width: 200px;
+  height: 20px;
+  margin-bottom: 50px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 5px 6px 1px rgba(0, 0, 0, 0.3);
+}
+.item__btn2:hover {
+  color: #000000;
+  background-color: white;
+}
+/*==================== Page panier ====================*/
+/*---------- Contenue ----------*/
+.order__details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0 auto;
+  justify-content: center;
+  width: 1000px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+  border: solid 1px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  box-shadow: 2px 5px 16px 1px rgba(0, 0, 0, 0.3);
+  margin: 30px auto;
+  list-style: none;
+  position: relative;
+}
+.items__title {
+  color: black;
+  text-shadow: 2px 1px rgba(0, 0, 0, 0.2);
+  margin-left: 10px;
+}
+.items__img img {
+  width: 225px;
+  height: 150px;
+  box-shadow: 2px 5px 16px 1px rgba(0, 0, 0, 0.1);
+}
+.items__color {
+  margin: 2px;
+}
+.items__quantity {
+  margin: 2px;
+}
+.delete__product {
+  width: 100px;
+  height: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 5px 6px 1px rgba(0, 0, 0, 0.3);
+  margin: 10px;
+}
+.delete__product:hover {
+  color: #000000;
+  background-color: white;
+}
+.items__price {
+  margin: 2px;
+}
+.cart__section {
+  display: flex;
+  justify-content: center;
+}
+.cancel__ordered {
+  margin: 0 auto;
+  width: 200px;
+  height: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 5px 6px 1px rgba(0, 0, 0, 0.3);
+}
+.cancel__btn {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+.total {
+  display: flex;
+  justify-content: center;
+}
+
+/*---------- Formulaire ----------*/
+.form__title {
+  text-align: center;
+  margin-top: 20px;
+}
+.details__form {
+  width: 325px;
+  display: flex;
+  flex-direction: column;
+  margin: 20px auto 0 auto;
+  padding-bottom: 20px;
+  text-align: center;
+}
+input {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.validate {
+  display: flex;
+  flex-direction: column;
+  margin: 20px auto;
+  align-items: center;
+  padding: 5px;
+  width: 200px;
+  height: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 5px 6px 1px rgba(0, 0, 0, 0.3);
+}
+
+/*==================== Nombres d'articles ====================*/
+.product__number {
+  display: inline-block;
+  border-radius: 5rem;
+  position: relative;
+  bottom: 5px;
+  left: 3px;
+  height: 20px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+/*==================== confirmation commande ====================*/
+#order__confirmation {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.puce {
+  text-decoration: none;
+}

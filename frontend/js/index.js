@@ -35,12 +35,14 @@ fetch("http://localhost:3000/api/teddies")
     function formatHtml(name, imageUrl, description, price, _id) {
       let myreturn = "";
       myreturn += `<li class="item">
-                    <h2 class="row">${name}</h2>
-                    <p class="row"><img src="
-                 ${imageUrl}" alt="Images ours" style= "width:500px;"></p>
-            <p class="row">${description}</p>
-            <p class="row">${(price / 100).toFixed(2).replace(".", ",")}€</p>
-        <a class="row" href="./produit.html?${_id}"<button>Choisir ${name}</button></a>
+                    <h2 class="item__title">${name}</h2>
+                    <div class="item__img"><img src="
+                 ${imageUrl}" alt="Images ours"></div>
+            <p class="item__description">${description}</p>
+            <p class="item__price">${(price / 100)
+              .toFixed(2)
+              .replace(".", ",")}€</p>
+        <a class="item__btn" href="./produit.html?${_id}"<button>Choisir ${name}</button></a>
         </li>`;
 
       return myreturn;

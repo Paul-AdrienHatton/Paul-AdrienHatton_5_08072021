@@ -4,8 +4,7 @@
 // Je met le nombre d'article dans une variable de base à 0
 // Je regarde si mon panier contient un produit
 //  - Si oui le total reste à 0
-//  - Si non je regarde chaque produit du panier et j'ajoute la quantité du produit
-//    pour chaque produit j'ajoute sa quantitée à ma variable qui est de base à 0
+//  - Si non je lui passe la valeur itemsCount (déterminer le nombre d'article dans le panier)
 // J'ajoute le résultat à l'emplacement choisi pour le nombre
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 howManyArticles();

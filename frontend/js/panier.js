@@ -33,58 +33,50 @@ function myCart() {
     let product = JSON.parse(sessionStorage.getItem("cart"));
     cartShow.insertAdjacentHTML(
       "afterbegin",
-      `<h1>Panier</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Articles</th>              
-                        <th>Nom</th>
-                        <th>Couleurs</th>
-                        <th>Nombre<br>d'articles</th>
-                        <th>Prix</th>
-                    </tr>
-                </thead>
-                <tbody class="order__details">
-                </tbody>
-            </table>`
+      `<div class="order__details">
+            </div>`
     );
 
     let html = "";
     total = product.itemsTotalValue;
     product.itemsEnum.forEach((product, index) => {
-      html += `<tr style="justify-items:center;">
-                        <td class="old"><img src="${
+      html += `<div class="container">
+                        <h2 class="items__title">${product.name}</h1>
+                        <p class="items__img"><img src="${
                           product.imageUrl
-                        }" alt="ours peluche" style="width:200px;"></td>
-                        <td class="old">${product.name}</td>
-                        <td class="old">${product.selectColors}</td>
-                        <td class="old" style="padding-left:50px;">
-                        ${product.quantity}
-                        <td class="old" style="padding-left:50px;">${(
+                        }" alt="ours peluche"></p>
+                        
+                        <p class="items__color">Couleur: ${
+                          product.selectColors
+                        }</p>
+                        <p class="items__quantity">
+                        Quantité: ${product.quantity}</p>
+                        <p class="items__price">Prix: ${(
                           product.price * product.quantity
                         )
                           .toFixed(2)
-                          .replace(".", ",")}€</td>
-                        <td><button class="delete__product ${index}" style="background-color:white; padding:0 5px 0 5px;">Supprimer</button></td>
-                    </tr>`;
+                          .replace(".", ",")}€</p>
+                        <p><button class="delete__product ${index}">Supprimer</button></p>
+                    </div>`;
       document.querySelector(".order__details").innerHTML = html;
     });
 
     cartShow.insertAdjacentHTML(
       "beforeend",
-      `<div class="total" style="margin-left:5%;">
-                <p class="cart-section" style="margin-right:5%;">Total: ${total
+      `<div class="total">
+                <h2 class="cart-section">Total: ${total
                   .toFixed(2)
-                  .replace(".", ",")}€</p>
+                  .replace(".", ",")}€</h2>
+                  </div>
+                  <div class="cancel__btn">
                 <button class="cancel__ordered">
-                    <p>Annuler le panier</p>
-                </button>
-            </div>`
+                    Annuler le panier
+                </button></div>`
     );
 
     cartShow.insertAdjacentHTML(
       "beforeend",
-      `<h2 style="margin-top:30px;">Veuillez remplir le formulaire ci-dessous avant de valider votre commande</h2>
+      `<h2 class="form__title">Veuillez remplir le formulaire ci-dessous avant de valider votre commande</h2>
           <form class="contact__form" action="post" type="submit">
               <div class="details__form">
                   <label for="firstName">PRENOM</label>
@@ -107,7 +99,7 @@ function myCart() {
                   <input type="email" name="email" id="email" placeholder="Veulliez entrer une adresse valide: adressemail@gmail.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+[.][a-z]{2,4}" required />
               </div>
               <button class="validate" id="submit">
-                  <p>Valider votre commande</p>
+                  Valider votre commande
               </button>
           </form>`
     );
@@ -116,14 +108,15 @@ function myCart() {
     const deleteItem = document.querySelectorAll(".delete__product");
     deleteItem.forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        let products = product.itemsEnum;
-        deleteProductSelect(e, products);
+        deleteProductSelect(e, product);
       });
     });
     //L'ecoute du boutton "annuler" le panier on ajoute un event qui vient supprimer l'ensemble du panier avec la fonction cancelMyOrdered
     const cancelOrdered = document.querySelector(".cancel__ordered");
     cancelOrdered.addEventListener("click", () => {
-      cancelMyOrdered();
+      if (confirm("Êtes-vous sûrs d'annuler le panier ?")) {
+        cancelMyOrdered();
+      }
     });
 
     //L'ecoute du boutton "valider votre commande" on ajoute un event qui vient envoyer le formulaire si bien remplie
@@ -148,13 +141,11 @@ function myCart() {
 //Supprime l'article sélectionné.
 //Récupère l'index de l'article correspondant avec le caractère du nom de la classe.
 //Supprime le bon article dans le tableau "items" du sessionStorage
-function deleteProductSelect(e, products) {
-  let index = e.target.classList[1].slice(-1);
-  products.splice(index, 1);
-
-  if (products.length === 0) {
-    sessionStorage.removeItem("cart");
-  }
+function deleteProductSelect(e, product) {
+  let index = product.itemsEnum.quantity;
+  console.log(product);
+  product.itemsEnum.splice(index, 1);
+  sessionStorage.setItem("cart", JSON.stringify(product));
   howManyArticles();
 }
 
@@ -195,11 +186,11 @@ function sendform() {
     });
   }
 
-  let customerOder = JSON.stringify({
+  let customerOrder = JSON.stringify({
     contact,
     products,
   });
-  postOrder(customerOder);
+  postOrder(customerOrder);
 }
 
 // =====================================================================================
@@ -207,14 +198,14 @@ function sendform() {
 //Requête POST, envoi au serveur "contact" et le tableau d'id "products"
 //Enregistre l'objet "contact" et Id, le total de la commande sur le sessionStorage.
 //Envoie page "confirmation"
-function postOrder(customerOder) {
+function postOrder(customerOrder) {
   fetch("http://localhost:3000/api/teddies/order", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     mode: "cors",
-    body: customerOder,
+    body: customerOrder,
   })
     .then((response) => {
       return response.json();
@@ -223,6 +214,7 @@ function postOrder(customerOder) {
       sessionStorage.setItem("contact", JSON.stringify(r.contact));
       sessionStorage.setItem("orderId", JSON.stringify(r.orderId));
       sessionStorage.setItem("total", JSON.stringify(total));
+      sessionStorage.removeItem("cart");
       window.location.replace("./confirmation.html");
     });
 }
