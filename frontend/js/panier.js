@@ -80,19 +80,19 @@ function myCart() {
           <form class="contact__form" action="post" type="submit">
               <div class="details__form">
                   <label for="firstName">PRENOM</label>
-                  <input type="text" name="firstName" id="firstName" placeholder="votre prénom" maxlength="25" pattern="[a-zA-ZÀ-ÿ]{2,}" required />
+                  <input type="text" name="firstName" id="firstName" placeholder="Votre prénom" maxlength="25" pattern="[a-zA-ZÀ-ÿ]{2,}" required />
               </div>
               <div class="details__form">
                   <label for="lastName">NOM</label>
-                  <input type="text" name="lastName" id="lastName" placeholder="votre nom" maxlength="25" pattern="[a-zA-ZÀ-ÿ]{2,}" required />
+                  <input type="text" name="lastName" id="lastName" placeholder="Votre nom" maxlength="25" pattern="[a-zA-ZÀ-ÿ]{2,}" required />
               </div>
               <div class="details__form">
                   <label for="address">ADRESSE</label>
-                  <input type="text" name="address" id="address" placeholder="votre adresse" maxlength="50" required />
+                  <input type="text" name="address" id="address" placeholder="Votre adresse" maxlength="50" required />
               </div>
               <div class="details__form">
                   <label for="city">VILLE</label>
-                  <input type="text" name="city" id="city" placeholder="votre ville" maxlength="50" pattern="[A-Za-z]{2,}" required />
+                  <input type="text" name="city" id="city" placeholder="Votre ville" maxlength="50" pattern="[A-Za-z]{2,}" required />
               </div>
               <div class="details__form">
                   <label for="email">EMAIL</label>
@@ -108,7 +108,9 @@ function myCart() {
     const deleteItem = document.querySelectorAll(".delete__product");
     deleteItem.forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        deleteProductSelect(e, product);
+        if (confirm("Êtes-vous sûrs de supprimer cette article ?")) {
+          deleteProductSelect(e, product);
+        }
       });
     });
     //L'ecoute du boutton "annuler" le panier on ajoute un event qui vient supprimer l'ensemble du panier avec la fonction cancelMyOrdered
@@ -131,10 +133,10 @@ function myCart() {
     cartShow.insertAdjacentHTML(
       //éviter la sérialisation supplémentaire, rend la fonction plus rapide et directe que innerHTML.
       "afterbegin", //  Juste à l'intérieur de l'element , avant son premier enfant
-      `<h2>Panier</h2>
-                <p class="cart-section">
-                    Vous n'avez aucun article!<a href="./index.html"><button>Revenir à la page d'accueil</button></a>
-                </p>`
+      `<p class="cart__section">
+          Vous n'avez aucun article!</p><a href="./index.html">
+          <button class="btn__returned">Revenir à la page d'accueil</button></a>
+        `
     );
   }
 }
@@ -142,9 +144,15 @@ function myCart() {
 //Récupère l'index de l'article correspondant avec le caractère du nom de la classe.
 //Supprime le bon article dans le tableau "items" du sessionStorage
 function deleteProductSelect(e, product) {
-  let index = product.itemsEnum.quantity;
+  index = product.itemsEnum.quantity;
+  index2 = product.itemsCount.quantity;
+  index3 = product.itemsTotalValue.quantity;
+
   console.log(product);
   product.itemsEnum.splice(index, 1);
+  product.itemsCount.splice(index, 1);
+  product.itemsTotalValue.splice(index, 1);
+  document.location.reload();
   sessionStorage.setItem("cart", JSON.stringify(product));
   howManyArticles();
 }
@@ -152,6 +160,7 @@ function deleteProductSelect(e, product) {
 //Supprime tout les article du sessionstorage
 function cancelMyOrdered() {
   sessionStorage.removeItem("cart");
+  howManyArticles();
 }
 
 //Réinitialise la section "item__select" et le nombre d'article dans le panier

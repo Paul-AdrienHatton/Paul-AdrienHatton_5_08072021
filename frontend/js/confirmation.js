@@ -13,18 +13,19 @@ const total = JSON.parse(sessionStorage.getItem("total"));
 let html = "";
 
 html += `
-    <h2>Confirmation de la commande</h2>
-    <ul>
-        <li class="puce">Vos coordonnées</li>
-        <li class="puce">Nom: ${contact.lastName}</li>
-        <li class="puce">Prénom: ${contact.firstName}</li>
-        <li class="puce">Adresse: ${contact.address}</li>
-        <li class="puce">Email: ${contact.email}</li>
-    </ul>
+    <h1 class="title__ordered">Confirmation de la commande</h1>
+    <div class="details__ordered">
+        <h2>Vos coordonnées :</h2>
+        <p class="puce">Nom: ${contact.lastName}</p>
+        <p class="puce">Prénom: ${contact.firstName}</p>
+        <p class="puce">Adresse: ${contact.address}</p>
+        <p class="puce">Email: ${contact.email}</p>
+    
     <h3>Total: ${total.toFixed(2).replace(".", ",")} €</h3>
-    <h3>Numéro de la commande: </br> ${orderId}</h3>`;
+    <h3>Numéro de la commande: </br> ${orderId}</h3>
+    </div>`;
 document.getElementById("order__confirmation").innerHTML = html;
-
+alert("Votre commande à bien été effectuée !");
 sessionStorage.removeItem("contact");
 sessionStorage.removeItem("total");
 sessionStorage.removeItem("orderId");
