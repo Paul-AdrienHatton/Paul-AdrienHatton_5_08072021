@@ -1,29 +1,4 @@
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-/**
- * Je veux afficher les résultats de mon panier (img, prix, quantité, couleur..)
- * je veux créer un total prix du panier de base à 0
- * je veux pouvoir intéragir sur les quantitées des produits déjà présent dans le panier
- *  - bouton "+"" et "-" avec un addeventlistener pour ajouter ou supprimer les quantitées d'un produit
- *  - bouton "supprimer" qui vient supprimer tout le produit peut importe la quantité et remet le total à 0
- * je veux pouvoir supprimer tout le panier
- *  - bouton "supprimer" tout le panier avec un addeventlistener et remet le total à 0
- *  - afficher un message panier vide
- * Je veux créer une fonction qui géreè toute le panier
- *
- * Je veux créer un formulaire
- * je veux que les champs soit obligatoire (requiered)
- * je veux créer des regex pour le mise en forme de donnée à envoyer
- * les données prennent la forme suivante: firstName, lastName, address, city et email
- * je veux que le form renvoie un objet nommé contact
- *
- * je veux envoyer mes données de contact et le tableau de produit
- *  - les données de contact doivent être un objet
- *  - le tableau de produit doit être un array de strings products
- * je doit utiliser la méthode post et envoyer la requête sous format Json
- * La réponse doit contenir l'objet contact, le tableau produits et  mon orderId sous forme de string
- * Je retourne une page de confirmation de l'envoie avec le contact, le total et orderID
- */
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+let cart = JSON.parse(sessionStorage.getItem("cart"));
 let cartShow = document.querySelector("#display__cart");
 let total = 0;
 myCart();
@@ -36,7 +11,6 @@ function myCart() {
       `<div class="order__details">
             </div>`
     );
-
     let html = "";
     total = product.itemsTotalValue;
     product.itemsEnum.forEach((product, index) => {
@@ -60,7 +34,6 @@ function myCart() {
                     </div>`;
       document.querySelector(".order__details").innerHTML = html;
     });
-
     cartShow.insertAdjacentHTML(
       "beforeend",
       `<div class="total">
@@ -73,7 +46,6 @@ function myCart() {
                     Annuler le panier
                 </button></div>`
     );
-
     cartShow.insertAdjacentHTML(
       "beforeend",
       `<h2 class="form__title">Veuillez remplir le formulaire ci-dessous avant de valider votre commande</h2>
@@ -103,81 +75,110 @@ function myCart() {
               </button>
           </form>`
     );
-
-    //L'ecoute du boutton "supprimer" on ajoute un event qui vient supprimer l'item avec la fonction deleteproductselect
+    /**
+     * L'ecoute du boutton "supprimer" on ajoute un event qui vient supprimer l'item avec la fonction deleteProductselect
+     */
     const deleteItem = document.querySelectorAll(".delete__product");
     deleteItem.forEach((btn) => {
       btn.addEventListener("click", (e) => {
         if (confirm("Êtes-vous sûrs de supprimer cette article ?")) {
           deleteProductSelect(e, product);
         }
+        setValuesforCart(product);
+        saveCart(product);
       });
     });
-    //L'ecoute du boutton "annuler" le panier on ajoute un event qui vient supprimer l'ensemble du panier avec la fonction cancelMyOrdered
+    /**
+     * L'ecoute du boutton "annuler" le panier on ajoute un event qui vient supprimer l'ensemble du panier avec la fonction deleteCart
+     */
     const cancelOrdered = document.querySelector(".cancel__ordered");
     cancelOrdered.addEventListener("click", () => {
       if (confirm("Êtes-vous sûrs d'annuler le panier ?")) {
-        cancelMyOrdered();
+        deleteCart();
       }
     });
-
-    //L'ecoute du boutton "valider votre commande" on ajoute un event qui vient envoyer le formulaire si bien remplie
+    /**
+     * L'ecoute du boutton "valider votre commande" on ajoute un event qui vient envoyer le formulaire si bien remplie
+     */
     const form = document.querySelector(".contact__form");
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       sendform();
     });
-
-    //Sinon, Panier vide on injecte un message pour indique que le panier est vide
+    /**
+     * Sinon, Panier vide on injecte un message pour indique que le panier est vide
+     */
   } else {
     cartShow.insertAdjacentHTML(
-      //éviter la sérialisation supplémentaire, rend la fonction plus rapide et directe que innerHTML.
-      "afterbegin", //  Juste à l'intérieur de l'element , avant son premier enfant
+      "afterbegin",
       `<p class="cart__section">
           Vous n'avez aucun article!</p><a href="./index.html">
-          <button class="btn__returned">Revenir à la page d'accueil</button></a>
-        `
+          <button class="btn__returned">Revenir à la page d'accueil</button></a>`
     );
   }
 }
-//Supprime l'article sélectionné.
-//Récupère l'index de l'article correspondant avec le caractère du nom de la classe.
-//Supprime le bon article dans le tableau "items" du sessionStorage
+/**
+ * Supprime l'article sélectionné.
+ *
+ * @param {*} e
+ * @param {*} product
+ */
 function deleteProductSelect(e, product) {
   index = product.itemsEnum.quantity;
-  index2 = product.itemsCount.quantity;
-  index3 = product.itemsTotalValue.quantity;
-
   console.log(product);
   product.itemsEnum.splice(index, 1);
-  product.itemsCount.splice(index, 1);
-  product.itemsTotalValue.splice(index, 1);
   document.location.reload();
   sessionStorage.setItem("cart", JSON.stringify(product));
-  howManyArticles();
 }
+/**
+ * Sauvegarde l'objet "cart" sous forme de json dans le sessionStorage
+ * @param {*} cart
+ */
+function saveCart(cart) {
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+}
+/**
+ * Calcule les valeurs des propriétés "itemsCount" et "itemsTotalValue"
+ * de l'objet "cart".
+ * Doit être appelée juste avant de sauvegarder l'objet "cart".
+ * @param {*} cart
+ */
+function setValuesforCart(cart) {
+  cart.itemsCount = 0;
+  cart.itemsTotalValue = 0.0;
 
-//Supprime tout les article du sessionstorage
-function cancelMyOrdered() {
+  cart.itemsEnum.forEach((element) => {
+    cart.itemsCount += element.quantity;
+    cart.itemsTotalValue += element.price * element.quantity;
+  });
+}
+/**
+ * function qui affiche le nombre d'articles dans le panier.
+ */
+function howManyArticles() {
+  showNumber = document.querySelector(".product__number");
+  let number = 0;
+  if (sessionStorage.getItem("cart") !== null) {
+    let keyNumber = JSON.parse(sessionStorage.getItem("cart"));
+    number = keyNumber.itemsCount;
+    showNumber.textContent = number;
+  } else {
+    showNumber.textContent = 0;
+  }
+  document.location.reload();
+}
+/**
+ * Supprime tout les article du sessionstorage
+ */
+function deleteCart() {
   sessionStorage.removeItem("cart");
   howManyArticles();
 }
-
-//Réinitialise la section "item__select" et le nombre d'article dans le panier
-function howManyArticles() {
-  cartShow.innerHTML = "";
-  myCart();
-  howManyArticles();
-}
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                  Function envoie du formulaire                    //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-
-//Récupère les valeurs de l'input dans contact__form
-//Récupère les id des produits du panier dans le tableau products
-//L'objet contact et le tableau products sont envoyé dans la function postOrder
+/**
+ * Récupère les valeurs de l'input dans contact__form
+ * Récupère les id des produits du panier dans le tableau products
+ * L'objet contact et le tableau products sont envoyé dans la function postOrder
+ */
 function sendform() {
   let contact = {
     firstName: document.getElementById("firstName").value,
@@ -186,7 +187,6 @@ function sendform() {
     city: document.getElementById("city").value,
     email: document.getElementById("email").value,
   };
-
   let products = [];
   if (sessionStorage.getItem("cart") !== null) {
     let productTab = JSON.parse(sessionStorage.getItem("cart"));
@@ -194,19 +194,18 @@ function sendform() {
       products.push(p._id);
     });
   }
-
   let customerOrder = JSON.stringify({
     contact,
     products,
   });
   postOrder(customerOrder);
 }
-
-// =====================================================================================
-
-//Requête POST, envoi au serveur "contact" et le tableau d'id "products"
-//Enregistre l'objet "contact" et Id, le total de la commande sur le sessionStorage.
-//Envoie page "confirmation"
+/**
+ * Requête POST, envoi au serveur "contact" et le tableau d'id "products"
+ * Enregistre l'objet "contact" et Id, le total de la commande sur le sessionStorage.
+ * Envoie page "confirmation"
+ * @param {*} customerOrder
+ */
 function postOrder(customerOrder) {
   fetch("http://localhost:3000/api/teddies/order", {
     method: "POST",

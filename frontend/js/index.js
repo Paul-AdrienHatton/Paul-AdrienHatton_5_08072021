@@ -1,20 +1,14 @@
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//Récupération des données ours en peluches avec l'API fetch.
-//Donné du produit injecté dans une fonction, mise au format html
-//Gestion des erreur instruction try/catch
-//
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+/**
+ * Récupération des données ours en peluches avec l'API fetch.
+ * Donné du produit injecté dans une fonction, mise au format html
+ * Gestion des erreur instruction try/catch
+ */
 fetch("http://localhost:3000/api/teddies")
   .then((response) => response.json())
   .then((response) => {
-    //Je créer ma variable que je vais ajouter à mes elements
     let html = "";
-
-    // Boucle pour récupére toutes les variables des produits + (Foreach)
     for (let i = 0; i < response.length; i++) {
       console.log(response[i].name);
-
-      //HTML à injecter
       html += formatHtml(
         response[i].name,
         response[i].imageUrl,
@@ -23,7 +17,6 @@ fetch("http://localhost:3000/api/teddies")
         response[i]._id
       );
     }
-
     try {
       fetch("http://localhost:3000/api/teddies").then((response) =>
         response.json()
@@ -31,7 +24,6 @@ fetch("http://localhost:3000/api/teddies")
     } catch (error) {
       checkStatus(response);
     }
-
     function formatHtml(name, imageUrl, description, price, _id) {
       let myreturn = "";
       myreturn += `<li class="item">
@@ -44,10 +36,8 @@ fetch("http://localhost:3000/api/teddies")
               .replace(".", ",")}€</p>
         <a class="item__btn" href="./produit.html?${_id}"<button>Choisir ${name}</button></a>
         </li>`;
-
       return myreturn;
     }
-
     document.getElementById("teddy_bear").innerHTML = html;
   });
 

@@ -1,10 +1,9 @@
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-// Récupération de l'id du produit sélectionné dans la page précédente
-// Récupération du produit avec l'id associé depuis le serveur
-//Donné du produit injecté dans une fonction, mise au format html
-//Gestion des erreur instruction try/catch
-//
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+/**
+ * Récupération de l'id du produit sélectionné dans la page précédente
+ * Récupération du produit avec l'id associé depuis le serveur
+ * Donné du produit injecté dans une fonction, mise au format html
+ * Gestion des erreur instruction try/catch
+ */
 const productId = window.location.search.substr(1);
 
 fetch(`http://localhost:3000/api/teddies/${productId}`)
@@ -18,7 +17,6 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
       response.price,
       response._id
     );
-
     function formatHtml(name, imageUrl, description, price, _id) {
       let myreturn = "";
       myreturn += `<h1 class="item__title">${name}</h1>
@@ -35,11 +33,9 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
             <!-- Mes choix de couleurs dans la function forEach --!>
             </select>
         <button class="item__btn2"id="addToCart">Ajouter au panier</button>`;
-
       return myreturn;
     }
     document.getElementById("item__details").innerHTML = html;
-
     try {
       fetch(`http://localhost:3000/api/teddies/${productId}`).then((response) =>
         response.json()
@@ -47,30 +43,22 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
     } catch (error) {
       checkStatus(response);
     }
-
     function checkStatus(response) {
       if (response.status !== 200) throw new Error("Request failed");
 
       return response.status === 200;
     }
-
-    ///////////////////////////////////////////////////////////////////////
-    //                                                                   //
-    //           Choix des couleurs et ajout du produit au panier        //
-    //                                                                   //
-    ///////////////////////////////////////////////////////////////////////
-
+    /**
+     * Choix des couleurs et ajout du produit au panier
+     */
     let choice = document.querySelector(".section__choice");
-
     response.colors.forEach(function (colors) {
       let option = document.createElement("option");
       option.value = colors;
       option.textContent = colors;
       choice.appendChild(option);
     });
-
     let cartBtn = document.querySelector("#addToCart");
-
     cartBtn.addEventListener("click", () => {
       // ajout évènement au clique de cartBtn
       let select = document.querySelector(".section__choice");

@@ -6,7 +6,7 @@
 //   - itemsEnum : []
 // Function ajout des articles au panier.
 
-// déclare une constante po;ur le nom du local storage
+// déclare une constante pour le nom du local storage
 const CART_STORAGE_NAME = "cart";
 
 ///////////////////////////////////////////////////////////////////////
@@ -60,7 +60,6 @@ function getDto(product) {
     selectColors: product.selectColors,
   };
 }
-
 /**
  * Crée un objet "cart" utilisé comme format d'echange et de stockage
  * @returns Object
@@ -72,7 +71,6 @@ function createCartDto() {
     itemsEnum: [],
   };
 }
-
 /**
  * Vérifie l'existence d'un panier dans le sessionStorage.
  *  - s'il existe, le retourne sous forme d'objet
@@ -84,7 +82,6 @@ function getCartDtoOrCreate() {
   if (cart) return cart;
   else return createCartDto();
 }
-
 /**
  * Calcule les valeurs des propriétés "itemsCount" et "itemsTotalValue"
  * de l'objet "cart".
@@ -100,7 +97,6 @@ function setValuesforCart(cart) {
     cart.itemsTotalValue += element.price * element.quantity;
   });
 }
-
 /**
  * Sauvegarde l'objet "cart" sous forme de json dans le sessionStorage
  * @param {*} cart
@@ -108,7 +104,6 @@ function setValuesforCart(cart) {
 function saveCart(cart) {
   sessionStorage.setItem(CART_STORAGE_NAME, JSON.stringify(cart));
 }
-
 /**
  * ajoute un item au cart.
  * Ne vérifie pas son existence ou non.
@@ -118,7 +113,6 @@ function saveCart(cart) {
 function addToCart(cart, product) {
   cart.itemsEnum.push(getDto(product));
 }
-
 /**
  * Verifie l'existence d'un produit dans le cart.
  * retourne true si le produit est déjà dans le panier.
@@ -137,10 +131,8 @@ function productAlreadyInCart(cart, product) {
     )
       alreadyInCart = true;
   });
-
   return alreadyInCart;
 }
-
 /**
  * Ajoute une unité à un produit déjà dans le panier.
  * @param {*} cart
