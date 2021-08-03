@@ -1,3 +1,10 @@
+/**
+ * Affichage du panier (données produits)
+ * Création du formulaire (données contact)
+ * Récupération des données de contact et produit
+ * Envoie des données au serveur
+ */
+
 let cart = JSON.parse(sessionStorage.getItem("cart"));
 let cartShow = document.querySelector("#display__cart");
 let total = 0;
@@ -9,43 +16,47 @@ function myCart() {
     cartShow.insertAdjacentHTML(
       "afterbegin",
       `<div class="order__details">
-            </div>`
+       </div>`
     );
     let html = "";
     total = product.itemsTotalValue;
     product.itemsEnum.forEach((product, index) => {
       html += `<div class="container">
-                        <h2 class="items__title">${product.name}</h1>
-                        <p class="items__img"><img src="${
-                          product.imageUrl
-                        }" alt="ours peluche"></p>
-                        
-                        <p class="items__color">Couleur: ${
-                          product.selectColors
-                        }</p>
-                        <p class="items__quantity">
-                        Quantité: ${product.quantity}</p>
-                        <p class="items__price">Prix: ${(
-                          product.price * product.quantity
-                        )
-                          .toFixed(2)
-                          .replace(".", ",")}€</p>
-                        <p><button class="delete__product ${index}">Supprimer</button></p>
-                    </div>`;
+                    <h2 class="items__title">
+                      ${product.name}
+                    </h2>
+                    <p class="items__img">
+                      <img src="${product.imageUrl}" alt="ours peluche">
+                    </p>
+                    
+                    <p class="items__color">Couleur: ${product.selectColors}</p>
+                    <p class="items__quantity">
+                    Quantité: ${product.quantity}</p>
+                    <p class="items__price">Prix: ${(
+                      product.price * product.quantity
+                    )
+                      .toFixed(2)
+                      .replace(".", ",")}€</p>
+                    <p><button class="delete__product ${index}">Supprimer</button></p>
+                </div>`;
       document.querySelector(".order__details").innerHTML = html;
     });
+
     cartShow.insertAdjacentHTML(
       "beforeend",
       `<div class="total">
                 <h2 class="cart-section">Total: ${total
                   .toFixed(2)
-                  .replace(".", ",")}€</h2>
-                  </div>
-                  <div class="cancel__btn">
+                  .replace(".", ",")}€
+                </h2>
+        </div>
+        <div class="cancel__btn">
                 <button class="cancel__ordered">
                     Annuler le panier
-                </button></div>`
+                </button>
+        </div>`
     );
+
     cartShow.insertAdjacentHTML(
       "beforeend",
       `<h2 class="form__title">Veuillez remplir le formulaire ci-dessous avant de valider votre commande</h2>
@@ -75,6 +86,7 @@ function myCart() {
               </button>
           </form>`
     );
+
     /**
      * L'ecoute du boutton "supprimer" on ajoute un event qui vient supprimer l'item avec la fonction deleteProductselect
      */
@@ -88,6 +100,7 @@ function myCart() {
         saveCart(product);
       });
     });
+
     /**
      * L'ecoute du boutton "annuler" le panier on ajoute un event qui vient supprimer l'ensemble du panier avec la fonction deleteCart
      */
@@ -97,6 +110,7 @@ function myCart() {
         deleteCart();
       }
     });
+
     /**
      * L'ecoute du boutton "valider votre commande" on ajoute un event qui vient envoyer le formulaire si bien remplie
      */
@@ -105,6 +119,7 @@ function myCart() {
       e.preventDefault();
       sendform();
     });
+
     /**
      * Sinon, Panier vide on injecte un message pour indique que le panier est vide
      */
@@ -112,11 +127,15 @@ function myCart() {
     cartShow.insertAdjacentHTML(
       "afterbegin",
       `<p class="cart__section">
-          Vous n'avez aucun article!</p><a href="./index.html">
-          <button class="btn__returned">Revenir à la page d'accueil</button></a>`
+          Vous n'avez aucun article!
+       </p>
+       <a href="./index.html">
+          <button class="btn__returned">Revenir à la page d'accueil</button>
+       </a>`
     );
   }
 }
+
 /**
  * Supprime l'article sélectionné.
  *
@@ -130,6 +149,7 @@ function deleteProductSelect(e, product) {
   document.location.reload();
   sessionStorage.setItem("cart", JSON.stringify(product));
 }
+
 /**
  * Sauvegarde l'objet "cart" sous forme de json dans le sessionStorage
  * @param {*} cart
@@ -137,6 +157,7 @@ function deleteProductSelect(e, product) {
 function saveCart(cart) {
   sessionStorage.setItem("cart", JSON.stringify(cart));
 }
+
 /**
  * Calcule les valeurs des propriétés "itemsCount" et "itemsTotalValue"
  * de l'objet "cart".
@@ -152,6 +173,7 @@ function setValuesforCart(cart) {
     cart.itemsTotalValue += element.price * element.quantity;
   });
 }
+
 /**
  * function qui affiche le nombre d'articles dans le panier.
  */
@@ -167,6 +189,7 @@ function howManyArticles() {
   }
   document.location.reload();
 }
+
 /**
  * Supprime tout les article du sessionstorage
  */
@@ -174,6 +197,7 @@ function deleteCart() {
   sessionStorage.removeItem("cart");
   howManyArticles();
 }
+
 /**
  * Récupère les valeurs de l'input dans contact__form
  * Récupère les id des produits du panier dans le tableau products
@@ -200,6 +224,7 @@ function sendform() {
   });
   postOrder(customerOrder);
 }
+
 /**
  * Requête POST, envoi au serveur "contact" et le tableau d'id "products"
  * Enregistre l'objet "contact" et Id, le total de la commande sur le sessionStorage.

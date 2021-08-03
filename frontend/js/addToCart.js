@@ -1,20 +1,9 @@
-// Créer un nouveau "addToCart.js" en s'inspirant de ce que nous avons fait, mais modifiant quelques comportements :
-// - cart doit être un objet (fonctions createCartDto() , setCart() , itemsEnum()).
-// - cart doit avoir au minimum les propriétés suivantes :
-//   - itemsCount
-//   - itemsTotalValue
-//   - itemsEnum : []
-// Function ajout des articles au panier.
-
-// déclare une constante pour le nom du local storage
-const CART_STORAGE_NAME = "cart";
-
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//   Function ajouter élément au panier ou augmenter la quantitée    //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
 /**
+ * Déclare une constante pour le nom du local storage
+ * */
+const CART_STORAGE_NAME = "cart";
+/**
+ * Function ajout des articles au panier.
  * Cette fonction :
  *  - récupère le panier s'il existe dans le sessionStorage ;
  *      - s'il existe, elle l'utilise comme objet
@@ -24,7 +13,7 @@ const CART_STORAGE_NAME = "cart";
  *      - s'il n'y est pas, elle l'ajoute
  *  - calcule les valeurs des propriétés de l'objet "cart"
  *  - sauvegarde l'objet "cart" dans le sessionStorage
- * @param {*} product
+ * @param {object} product
  */
 function myCart(product) {
   let cart = getCartDtoOrCreate();
@@ -35,19 +24,13 @@ function myCart(product) {
   setValuesforCart(cart);
   saveCart(cart);
   howManyArticles();
-  alert("Vôtre produit a été ajouter au panier");
+  alert("Votre produit a été ajouté au panier");
 }
-
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//           Fonction Objet de transfert de données                  //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
 
 /**
  * Cette fonction permet de transformer un produit en élément de panier
  * (DTO = Data Transfer Object)
- * @param object product est le produit à ajouter
+ * @param object product est le produit à ajouté
  * @returns object
  */
 function getDto(product) {
@@ -60,6 +43,7 @@ function getDto(product) {
     selectColors: product.selectColors,
   };
 }
+
 /**
  * Crée un objet "cart" utilisé comme format d'echange et de stockage
  * @returns Object
@@ -71,6 +55,7 @@ function createCartDto() {
     itemsEnum: [],
   };
 }
+
 /**
  * Vérifie l'existence d'un panier dans le sessionStorage.
  *  - s'il existe, le retourne sous forme d'objet
@@ -82,11 +67,12 @@ function getCartDtoOrCreate() {
   if (cart) return cart;
   else return createCartDto();
 }
+
 /**
  * Calcule les valeurs des propriétés "itemsCount" et "itemsTotalValue"
  * de l'objet "cart".
  * Doit être appelée juste avant de sauvegarder l'objet "cart".
- * @param {*} cart
+ * @param {object} cart
  */
 function setValuesforCart(cart) {
   cart.itemsCount = 0;
@@ -97,33 +83,35 @@ function setValuesforCart(cart) {
     cart.itemsTotalValue += element.price * element.quantity;
   });
 }
+
 /**
  * Sauvegarde l'objet "cart" sous forme de json dans le sessionStorage
- * @param {*} cart
+ * @param {object} cart
  */
 function saveCart(cart) {
   sessionStorage.setItem(CART_STORAGE_NAME, JSON.stringify(cart));
 }
+
 /**
  * ajoute un item au cart.
  * Ne vérifie pas son existence ou non.
- * @param {*} cart
- * @param {*} product
+ * @param {object} cart
+ * @param {object} product
  */
 function addToCart(cart, product) {
   cart.itemsEnum.push(getDto(product));
 }
+
 /**
  * Verifie l'existence d'un produit dans le cart.
  * retourne true si le produit est déjà dans le panier.
- * @param {*} cart
- * @param {*} product
+ * @param {object} cart
+ * @param {object} product
  * @returns bool
  */
 function productAlreadyInCart(cart, product) {
   let alreadyInCart = false;
   if (!cart.itemsEnum) return alreadyInCart;
-
   cart.itemsEnum.forEach((element) => {
     if (
       element._id === product._id &&
@@ -133,10 +121,11 @@ function productAlreadyInCart(cart, product) {
   });
   return alreadyInCart;
 }
+
 /**
  * Ajoute une unité à un produit déjà dans le panier.
- * @param {*} cart
- * @param {*} product
+ * @param {object} cart
+ * @param {object} product
  */
 function updateProductQuantity(cart, product) {
   cart.itemsEnum.forEach((element) => {

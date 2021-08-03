@@ -17,6 +17,7 @@ fetch("http://localhost:3000/api/teddies")
         response[i]._id
       );
     }
+
     try {
       fetch("http://localhost:3000/api/teddies").then((response) =>
         response.json()
@@ -24,6 +25,7 @@ fetch("http://localhost:3000/api/teddies")
     } catch (error) {
       checkStatus(response);
     }
+
     function formatHtml(name, imageUrl, description, price, _id) {
       let myreturn = "";
       myreturn += `<li class="item">

@@ -17,6 +17,7 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
       response.price,
       response._id
     );
+
     function formatHtml(name, imageUrl, description, price, _id) {
       let myreturn = "";
       myreturn += `<h1 class="item__title">${name}</h1>
@@ -36,6 +37,7 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
       return myreturn;
     }
     document.getElementById("item__details").innerHTML = html;
+
     try {
       fetch(`http://localhost:3000/api/teddies/${productId}`).then((response) =>
         response.json()
@@ -43,11 +45,13 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
     } catch (error) {
       checkStatus(response);
     }
+
     function checkStatus(response) {
       if (response.status !== 200) throw new Error("Request failed");
 
       return response.status === 200;
     }
+
     /**
      * Choix des couleurs et ajout du produit au panier
      */
@@ -58,6 +62,7 @@ fetch(`http://localhost:3000/api/teddies/${productId}`)
       option.textContent = colors;
       choice.appendChild(option);
     });
+
     let cartBtn = document.querySelector("#addToCart");
     cartBtn.addEventListener("click", () => {
       // ajout évènement au clique de cartBtn
