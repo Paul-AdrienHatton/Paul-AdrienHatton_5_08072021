@@ -195,6 +195,7 @@ function howManyArticles() {
  */
 function deleteCart() {
   sessionStorage.removeItem("cart");
+  document.location.reload();
   howManyArticles();
 }
 

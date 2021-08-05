@@ -22,7 +22,7 @@ html += `
 document.getElementById("order__confirmation").innerHTML = html;
 alert("Votre commande à bien été effectuée !");
 
-// sessionStorage.removeItem("contact");
-// sessionStorage.removeItem("total");
-// sessionStorage.removeItem("orderId");
-// sessionStorage.removeItem("cart");
+sessionStorage.removeItem("contact");
+sessionStorage.removeItem("total");
+sessionStorage.removeItem("orderId");
+sessionStorage.removeItem("cart");
