@@ -139,7 +139,7 @@ function myCart() {
 /**
  * Supprime l'article sélectionné.
  *
- * @param {*} e
+ *
  * @param {*} product
  */
 function deleteProductSelect(e, product) {
@@ -241,6 +241,13 @@ function postOrder(customerOrder) {
     body: customerOrder,
   })
     .then((response) => {
+      try {
+        fetch("http://localhost:3000/api/teddies/order").then((response) =>
+          response.json()
+        );
+      } catch (error) {
+        checkStatus(response);
+      }
       return response.json();
     })
     .then((r) => {
@@ -250,4 +257,9 @@ function postOrder(customerOrder) {
       sessionStorage.removeItem("cart");
       window.location.replace("./confirmation.html");
     });
+}
+function checkStatus(response) {
+  if (response.status !== 200) throw new Error("Request failed");
+
+  return response.status === 200;
 }
